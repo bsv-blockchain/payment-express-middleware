@@ -1,13 +1,20 @@
 {
   "name": "@bsv/payment-express-middleware",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "BSV Blockchain service monetization express middleware",
-  "main": "./src/index.ts",
+  "type": "module",
+  "main": "dist/cjs/mod.js",
+  "module": "dist/esm/mod.js",
+  "types": "dist/types/mod.d.ts",
   "scripts": {
     "test": "npm run build && jest",
     "test:watch": "npm run build && jest --watch",
     "test:coverage": "npm run build && jest --coverage",
-    "lint": "ts-standard --fix src/**/*.ts"
+    "lint": "ts-standard --fix src/**/*.ts",
+    "build": "tsc -b && tsconfig-to-dual-package tsconfig.cjs.json",
+    "dev": "tsc -b -w",
+    "prepublish": "npm run build",
+    "doc": "ts2md --inputFilename=mod.ts --outputFilename=API.md --filenameSubstring=API --firstHeadingLevel=1"
   },
   "keywords": [
     "BSV",
@@ -16,6 +23,18 @@
     "Express",
     "Middleware"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/mod.d.ts",
+      "import": "./dist/esm/mod.js",
+      "require": "./dist/cjs/mod.js"
+    },
+    "./*.ts": {
+      "types": "./dist/types/src/*.d.ts",
+      "import": "./dist/esm/src/*.js",
+      "require": "./dist/cjs/src/*.js"
+    }
+  },
   "author": "BSV Blockchain Association",
   "license": "SEE LICENSE IN LICENSE.txt",
   "devDependencies": {

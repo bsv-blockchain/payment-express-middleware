@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AtomicBEEF, createNonce, verifyNonce } from '@bsv/sdk'
-import { BSVPayment, PaymentMiddlewareOptions, PaymentResult } from './types';
+import { BSVPayment, PaymentMiddlewareOptions, PaymentResult } from './types.js';
 
 /**
  * Creates middleware that enforces BSV payment for HTTP requests.
