@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { AtomicBEEF, createNonce, verifyNonce } from '@bsv/sdk'
-import { BSVPayment, PaymentMiddlewareOptions, PaymentResult } from './types.js';
+import { AtomicBEEF, createNonce, Utils, verifyNonce } from '@bsv/sdk'
+import { BSVPayment, PaymentMiddlewareOptions, PaymentResult } from './types.js'
+
+const PAYMENT_VERSION = '1.0'
 
 /**
  * Creates middleware that enforces BSV payment for HTTP requests.
@@ -59,6 +61,7 @@ export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
       const derivationPrefix = await createNonce(wallet)
       return res.status(402)
         .set({
+          'x-bsv-payment-version': PAYMENT_VERSION,
           'x-bsv-payment-satoshis-required': String(requestPrice),
           'x-bsv-payment-derivation-prefix': derivationPrefix
         })
@@ -95,7 +98,7 @@ export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
 
     try {
       const { accepted }: PaymentResult = await wallet.internalizeAction({
-        tx: paymentData.transaction as AtomicBEEF,
+        tx: Utils.toArray(paymentData.transaction, 'base64') as AtomicBEEF,
         outputs: [{
           paymentRemittance: {
             derivationPrefix: paymentData.derivationPrefix,
