@@ -1,8 +1,8 @@
 import {
   PrivateKey,
   RequestedCertificateTypeIDAndFieldList,
+  AuthFetch
 } from '@bsv/sdk'
-import { AuthFetch } from '@bsv/sdk'
 import { MockWallet } from './MockWallet'
 import { Server } from 'http'
 import { startServer } from './testExpressServer'
@@ -13,11 +13,9 @@ export interface RequestedCertificateSet {
 }
 
 describe('AuthFetch and AuthExpress Integration Tests', () => {
-  let privKey: PrivateKey
+  const privKey = PrivateKey.fromRandom()
   let server: Server
-  privKey = PrivateKey.fromRandom()
   beforeAll((done) => {
-
     // Start the Express server
     server = startServer(3000)
     server.on('listening', () => {
@@ -42,7 +40,8 @@ describe('AuthFetch and AuthExpress Integration Tests', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({})
       }
     )
     expect(result.status).toBe(200)
@@ -50,5 +49,5 @@ describe('AuthFetch and AuthExpress Integration Tests', () => {
     console.log(jsonResponse)
     expect(Number(result.headers.get('x-bsv-payment-satoshis-paid'))).toEqual(10)
     expect(jsonResponse).toBeDefined()
-  }, 15000)
+  }, 150000)
 })

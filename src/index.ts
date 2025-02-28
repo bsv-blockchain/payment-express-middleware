@@ -15,7 +15,7 @@ const PAYMENT_VERSION = '1.0'
  *
  * @returns Express middleware that requires payment if `calculateRequestPrice` > 0.
  */
-export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
+export function createPaymentMiddleware(options: PaymentMiddlewareOptions): (req: Request, res: Response, next: NextFunction) => Promise<void> {
   const {
     calculateRequestPrice = () => 100, // Default to 100 satoshis if no price calculator is provided
     wallet
@@ -25,12 +25,12 @@ export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
     throw new Error('The calculateRequestPrice option must be a function.')
   }
 
-  if (!wallet || typeof wallet !== 'object') {
+  if (wallet === undefined || typeof wallet !== 'object') {
     throw new Error('A valid wallet instance must be supplied to the payment middleware.')
   }
 
   return async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.auth || typeof req.auth.identityKey !== 'string') {
+    if (req.auth === undefined || typeof req.auth.identityKey !== 'string') {
       return res.status(500).json({
         status: 'error',
         code: 'ERR_SERVER_MISCONFIGURED',
@@ -57,7 +57,7 @@ export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
     }
 
     const bsvPaymentHeader = req.headers['x-bsv-payment']
-    if (!bsvPaymentHeader) {
+    if (bsvPaymentHeader === undefined) {
       const derivationPrefix = await createNonce(wallet)
       return res.status(402)
         .set({
@@ -113,7 +113,7 @@ export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
 
       req.payment = {
         satoshisPaid: requestPrice,
-        accepted: accepted,
+        accepted,
         tx: paymentData.transaction
       }
 
@@ -125,8 +125,8 @@ export function createPaymentMiddleware(options: PaymentMiddlewareOptions) {
     } catch (err: any) {
       return res.status(400).json({
         status: 'error',
-        code: err.code || 'ERR_PAYMENT_FAILED',
-        description: err.message || 'Payment failed.'
+        code: err.code ?? 'ERR_PAYMENT_FAILED',
+        description: err.message ?? 'Payment failed.'
       })
     }
   }

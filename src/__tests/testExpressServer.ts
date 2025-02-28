@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
-import { PrivateKey } from '@bsv/sdk'
-import { VerifiableCertificate } from '@bsv/sdk'
+import { PrivateKey, VerifiableCertificate } from '@bsv/sdk'
 import { MockWallet } from './MockWallet'
 import { createAuthMiddleware } from '@bsv/auth-express-middleware'
 import { createPaymentMiddleware } from '../index'
@@ -16,19 +15,19 @@ app.use(express.text())
 app.use(bodyParser.raw({ type: 'application/octet-stream', limit: '500mb' }))
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', '*');
-  res.header('Access-Control-Expose-Headers', '*');
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', '*')
+  res.header('Access-Control-Allow-Methods', '*')
+  res.header('Access-Control-Expose-Headers', '*')
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
+    res.sendStatus(200)
   } else {
-    next();
+    next()
   }
 })
 
 const privKey = new PrivateKey(1)
-const mockWallet = new MockWallet(privKey);
+const mockWallet = new MockWallet(privKey)
 
 // Define routes
 app.post('/no-auth', (req: Request, res: Response) => {
@@ -55,9 +54,9 @@ app.use(createPaymentMiddleware({
 }))
 
 app.post('/get-weather', async (req: Request, res: Response) => {
-  const response = await fetch('https://openweathermap.org/data/2.5/weather?id=5746545&appid=439d4b804bc8187953eb36d2a8c26a02', { method: 'GET' });
-  const weatherData = await response.json();
-  res.json(weatherData);
+  const response = await fetch('https://openweathermap.org/data/2.5/weather?id=5746545&appid=439d4b804bc8187953eb36d2a8c26a02', { method: 'GET' })
+  const weatherData = await response.json()
+  res.json(weatherData)
 })
 
 // Fallback for 404 errors
