@@ -35,13 +35,9 @@ describe('AuthFetch and AuthExpress Integration Tests', () => {
     const walletWithRequests = new MockWallet(privKey)
     const authClient = new AuthFetch(walletWithRequests)
     const result = await authClient.fetch(
-      'http://localhost:3000/get-weather',
+      'http://localhost:3000/weather',
       {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
+        method: 'GET'
       }
     )
     expect(result.status).toBe(200)

@@ -53,7 +53,7 @@ app.use(createPaymentMiddleware({
   }
 }))
 
-app.post('/get-weather', async (req: Request, res: Response) => {
+app.get('/weather', async (req: Request, res: Response) => {
   const response = await fetch('https://openweathermap.org/data/2.5/weather?id=5746545&appid=439d4b804bc8187953eb36d2a8c26a02', { method: 'GET' })
   const weatherData = await response.json()
   res.json(weatherData)
