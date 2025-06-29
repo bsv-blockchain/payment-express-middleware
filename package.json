@@ -6,6 +6,12 @@
   "main": "dist/cjs/mod.js",
   "module": "dist/esm/mod.js",
   "types": "dist/types/mod.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "mod.ts",
+    "LICENSE.txt"
+  ],
   "scripts": {
     "test": "npm run build && jest",
     "test:watch": "npm run build && jest --watch",
