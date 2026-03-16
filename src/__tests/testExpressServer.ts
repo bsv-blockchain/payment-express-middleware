@@ -8,6 +8,9 @@ import { createPaymentMiddleware } from '../index'
 // Create Express app instance
 export const app = express()
 
+// Disable x-powered-by header to prevent version disclosure
+app.disable('x-powered-by')
+
 // Middleware setup
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }))
@@ -54,7 +57,8 @@ app.use(createPaymentMiddleware({
 }))
 
 app.get('/weather', async (req: Request, res: Response) => {
-  const response = await fetch('https://openweathermap.org/data/2.5/weather?id=5746545&appid=439d4b804bc8187953eb36d2a8c26a02', { method: 'GET' })
+  const appId = process.env.OPENWEATHER_APP_ID ?? 'test'
+  const response = await fetch(`https://openweathermap.org/data/2.5/weather?id=5746545&appid=${appId}`, { method: 'GET' })
   const weatherData = await response.json()
   res.json(weatherData)
 })
@@ -67,9 +71,9 @@ app.use((req, res, next) => {
     message: 'The requested resource was not found on this server.'
   })
 })
-const port = 3000
+const defaultPort = 3000
 // Export a function to start the server programmatically
-export const startServer = (port = 3000): ReturnType<typeof app.listen> => {
+export const startServer = (port = defaultPort): ReturnType<typeof app.listen> => {
   return app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
   })
