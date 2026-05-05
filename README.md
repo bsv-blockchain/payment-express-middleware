@@ -1,5 +1,9 @@
 # @bsv/payment-express-middleware
 
+> **⚠️ This repository is being archived.**
+>
+> Development has moved to the [ts-stack monorepo](https://github.com/bsv-blockchain/ts-stack/tree/main/packages/middleware/payment-express-middleware). Open issues will be migrated there. This repository will be archived in the coming days — please open new issues and PRs in the monorepo going forward.
+
 Accept **BSV micropayments** in your Express.js API by seamlessly integrating **402 Payment Required** flows with [BRC-103](https://github.com/bitcoin-sv/BRCs/blob/master/peer-to-peer/0103.md) and [BRC-104](https://github.com/bitcoin-sv/BRCs/blob/master/peer-to-peer/0104.md) mutual authentication. This middleware builds upon the **[Auth middleware](https://github.com/bitcoin-sv/auth-express-middleware)**—thus letting you identify and authenticate the payer before receiving BSV to monetize your services.
 
 - **Monetize your APIs** via BSV micropayments.  
